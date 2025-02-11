@@ -34,6 +34,13 @@ if test $? != 0;then
 	exit 1
 fi
 
+grep "^Message-Authenticator            = " $TMPFILE >/dev/null 2>&1
+if test $? != 0;then
+	echo "Error in request info data (Message-Authenticator)"
+	cat $TMPFILE
+	exit 1
+fi
+
 grep "^Framed-Protocol                  = 'PPP'$" $TMPFILE >/dev/null 2>&1
 if test $? != 0;then
 	echo "Error in data received by server (Framed-Protocol)"

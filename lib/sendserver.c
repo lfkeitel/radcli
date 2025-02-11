@@ -670,11 +670,9 @@ int rc_send_server_ctx(rc_handle * rh, RC_AAA_CTX ** ctx, SEND_DATA * data,
 		total_length =
 		    rc_pack_list(data->send_pairs, secret, auth) + AUTH_HDR_LEN;
 
-		auth->length = htons((unsigned short)total_length);
+		total_length = add_msg_auth_attr(rh, secret, auth, total_length);
 
-		/* If EAP message we MUST add a Message-Authenticator attribute */
-		if (rc_avpair_get(data->send_pairs, PW_EAP_MESSAGE, 0) != NULL)
-		    total_length = add_msg_auth_attr(rh, secret, auth, total_length);
+		auth->length = htons((unsigned short)total_length);
 	}
 
 	if (radcli_debug) {
